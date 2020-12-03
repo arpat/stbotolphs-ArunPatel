@@ -11,8 +11,9 @@ WORKDIR /usr/src/app
 # Copy Docker configuration and install any requirements. We install
 # requirements/docker.txt last to allow it to override any versions in
 # requirements/requirements.txt.
+# TODO added --no-dependencies to allow it to proceed in hope -Arun
 ADD ./requirements.txt ./
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt --no-dependencies
 
 # Default environment for image.  By default, we use the settings module bundled
 # with this repo. Change DJANGO_SETTINGS_MODULE to install a custom settings.
@@ -38,6 +39,9 @@ RUN adduser -S webapp
 # Give webapp ability to *read* files but not write anything. Our container
 # should not need to write to the local filesystem.
 RUN chown -R webapp /usr/src/app && chmod -R oug-w /usr/src/app
+
+# TODO chowm migrations directory
+RUN chown webapp /usr/local/lib/python3.7/site-packages/djangocms_forms/migrations
 
 # Run everything as the unprivileged user
 USER webapp

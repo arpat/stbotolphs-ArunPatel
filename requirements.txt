@@ -1,13 +1,15 @@
 # djangocms-forms does not support Django 2
 Django>=1.11,<2.0
-Pillow~=3.0
-boto3
+# Pillow~=3.0
+Pillow  ## attempting fix of ValueError: Operation on closed image
+boto3==1.5.0
 django-classy-tags~=1.0.0
 django-cms>=3.7,<3.8
 django-filer~=1.7.1
 django-mptt~=0.9
 django-sekizai~=1.1.0
-django-storages~=1.9.1
+# django-storages~=1.9.1
+django-storages==1.6.3  ## attempting fix of ValueError: Operation on closed image
 django-treebeard>=4.0,<5.0
 djangocms-admin-style>=1.3,<1.5
 djangocms-file>=2.2,<3.0
@@ -28,3 +30,17 @@ pytz
 six
 whitenoise
 jsonfield~=3.0.0
+
+webencodings
+unidecode
+django-polymorphic==1.3
+djangocms_attributes_field
+django-appconf
+hashids
+django-hashids
+django-formtools
+tablib
+botocore
+python-dateutil
+jmespath
+s3transfer

@@ -36,6 +36,19 @@ services:
     environment:
       PHP_PG_ADMIN_SERVER_HOST: db
 
+  # An updated DB web frontend
+  dbpanel4:
+    image: dpage/pgadmin4
+    depends_on:
+      - db
+    ports:
+      - "8033:80"
+    volumes:
+      - ./env/servers.json:/pgadmin4/servers.json
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "email@example.com"
+      PGADMIN_DEFAULT_PASSWORD: "somepass"
+
   # minio provides an S3-compatible API so we can use object storage in
   # development.
   minio:
@@ -59,12 +72,15 @@ services:
   # The web application itself
   webapp:
     <<: *webapp-template
+    environment:
+      - "FILER_ENABLE_LOGGING=true"
+      - "FILER_DEBUG=true"
 
   # Convenience service to make sure the latest database migrations are applied.
   webapp_migrate:
     <<: *webapp-template
     # HACK: we sleep to give the database time to come up
-    entrypoint: ['sh', '-c', 'sleep 5 && ./manage.py migrate']
+    entrypoint: ['sh', '-xc', 'sleep 5 && ./manage.py makemigrations && ./manage.py migrate']
 
 volumes:
   # Persistent volumes for postgres database data

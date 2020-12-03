@@ -237,3 +237,6 @@ else:
     logging.warning('Not using S3 to store files. Container is not stateless.')
 
 ALLOWED_HOSTS = ['*']
+
+FILER_ENABLE_LOGGING = 'true'
+FILER_DEBUG = 'true'
