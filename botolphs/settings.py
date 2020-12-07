@@ -172,6 +172,16 @@ CMS_PLACEHOLDER_CONF = {}
 # Database configuration. The default settings allow configuration of the database from
 # environment variables. An environment variable named ``DJANGO_DB_<key>`` will override the
 # ``DATABASES['default'][<key>]`` setting.
+# TODO ####### Google Cloud Implementation Notes ####### 
+# 09/12/2020: This does not work, probably google kms v1/2 version confusion
+# from google.cloud import kms
+# import base64
+# client = kms.KeyManagementServiceClient()
+# key_name = client.crypto_key_path(project_id, location_id, key_ring_id, key_id)
+# key_name = client.crypto_key_path('stbotolphs-297814', 'europe-west1', 'main-keyring', 'sql-crypto-key')
+# ciphertext = base64.b64decode(cypher))
+# decrypt_response = client.decrypt(request={'name': key_name, 'ciphertext': ciphertext})
+# PASSWORD = 'Plaintext: {}'.format(decrypt_response.plaintext)
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
