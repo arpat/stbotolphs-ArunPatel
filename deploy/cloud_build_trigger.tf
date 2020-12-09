@@ -75,27 +75,28 @@ resource "google_cloudbuild_trigger" "default" {
       wait_for   = []
     }
 
-    step {
-      args = [
-        "run",
-        "services",
-        "update",
-        "$_SERVICE_NAME",
-        "--platform=managed",
-        "--image=$_GCR_HOSTNAME/$PROJECT_ID/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA",
-        "--region=$_DEPLOY_REGION",
-        "--command=./manage.py",
-        "--args=migrate",
-        "--max-instances=1",
-        "--timeout=300",
-      ]
-      entrypoint = "gcloud"
-      env        = []
-      id         = "Migrate"
-      name       = "gcr.io/google.com/cloudsdktool/cloud-sdk"
-      secret_env = []
-      wait_for   = []
-    }
+    # TODO - rework this to solve build step #3 - "Deploy": the ID is not unique
+    # step {
+    #   args = [
+    #     "run",
+    #     "services",
+    #     "update",
+    #     "$_SERVICE_NAME",
+    #     "--platform=managed",
+    #     "--image=$_GCR_HOSTNAME/$PROJECT_ID/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA",
+    #     "--region=$_DEPLOY_REGION",
+    #     "--command=./manage.py",
+    #     "--args=migrate",
+    #     "--max-instances=1",
+    #     "--timeout=300",
+    #   ]
+    #   entrypoint = "gcloud"
+    #   env        = []
+    #   id         = "Migrate"
+    #   name       = "gcr.io/google.com/cloudsdktool/cloud-sdk"
+    #   secret_env = []
+    #   wait_for   = []
+    # }
 
     step {
       args = [
@@ -111,7 +112,7 @@ resource "google_cloudbuild_trigger" "default" {
       ]
       entrypoint = "gcloud"
       env        = []
-      id         = "Deploy"
+      id         = "Deploy2"
       name       = "gcr.io/google.com/cloudsdktool/cloud-sdk"
       secret_env = []
       wait_for   = []
