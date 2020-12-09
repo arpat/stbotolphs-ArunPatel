@@ -3,9 +3,10 @@ resource "google_sql_database_instance" "master" {
   database_version    = "POSTGRES_13"
   deletion_protection = true
 
-  name    = "stbotolphs-production"
-  project = "stbotolphs-297814"
-  region  = "europe-west1"
+  name    = "stbotolphs-${var.environment_name}"
+  project = "${var.project_name}"
+  region  = "${var.gcp_region}"
+
 
   settings {
     activation_policy = "ALWAYS"
