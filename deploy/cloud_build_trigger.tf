@@ -62,6 +62,7 @@ resource "google_cloudbuild_trigger" "default" {
       secret_env = []
       wait_for   = []
     }
+
     step {
       args = [
         "push",
@@ -73,7 +74,6 @@ resource "google_cloudbuild_trigger" "default" {
       secret_env = []
       wait_for   = []
     }
-
 
     step {
       args = [
@@ -87,16 +87,16 @@ resource "google_cloudbuild_trigger" "default" {
         "--region=$_DEPLOY_REGION",
         "--command=./manage.py",
         "--args=migrate",
-        "--max-instances=1"
+        "--max-instances=1",
+        "--timeout=300",
       ]
       entrypoint = "gcloud"
       env        = []
-      id         = "Deploy"
+      id         = "Migrate"
       name       = "gcr.io/google.com/cloudsdktool/cloud-sdk"
       secret_env = []
       wait_for   = []
     }
-
 
     step {
       args = [
