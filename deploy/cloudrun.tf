@@ -1,4 +1,17 @@
-# google_cloud_run_service.default:
+variable "django_db_password" {
+  type = string
+}
+variable "django_aws_access_key" {
+  type = string
+}
+variable "django_aws_secret_access_key" {
+  type = string
+}
+variable "django_secret_key" {
+  type = string
+}
+
+// google_cloud_run_service.default:
 resource "google_cloud_run_service" "default" {
   autogenerate_revision_name = true
   location                   = "europe-west1"
@@ -18,7 +31,7 @@ resource "google_cloud_run_service" "default" {
 
         env {
           name  = "DJANGO_SECRET_KEY"
-          value = "WIcoveDc3IMko"
+          value = var.django_secret_key
         }
         env {
           name  = "DJANGO_DB_HOST"
@@ -30,7 +43,7 @@ resource "google_cloud_run_service" "default" {
         }
         env {
           name  = "DJANGO_DB_PASSWORD"
-          value = "LbpdHqvD6lne0Pol"
+          value = var.django_db_password
         }
         env {
           name  = "DJANGO_DB_ENGINE"
@@ -44,6 +57,34 @@ resource "google_cloud_run_service" "default" {
           name  = "DJANGO_DB_CONN_MAX_AGE"
           value = "60"
         }
+        env {
+          name  = "DJANGO_AWS_ACCESS_KEY_ID"
+          value = var.django_aws_access_key
+        }
+        env {
+          name  = "DJANGO_AWS_SECRET_ACCESS_KEY"
+          value = var.django_aws_secret_access_key
+        }
+        env {
+          name  = "DJANGO_AWS_STORAGE_BUCKET_NAME"
+          value = "stbotolphs-ude3qzzeda"
+        }
+        env {
+          name  = "DJANGO_AWS_S3_ENDPOINT_URL"
+          value = "https://stbotolphs-ude3qzzeda.s3.eu-central-1.amazonaws.com"
+        }
+        env {
+          name  = "DJANGO_DANGEROUS_DISABLE_AWS_USE_SSL"
+          value = "0"
+        }
+        env {
+          name  = "DJANGO_AWS_S3_REGION_NAME"
+          value = "eu-central-1"
+        }
+        env {
+          name  = "DJANGO_AWS_S3_HOST"
+          value = "s3.eu-central-1.amazonaws.com"
+        }
 
         ports {
           container_port = 8000
@@ -52,7 +93,7 @@ resource "google_cloud_run_service" "default" {
         resources {
           limits = {
             "cpu"    = "1000m"
-            "memory" = "128Mi"
+            "memory" = "256Mi"
           }
           requests = {}
         }
@@ -82,5 +123,5 @@ resource "google_cloud_run_service_iam_member" "allUsers" {
 
 // cloud run service endpoint URL
 output "url" {
-  value = "${google_cloud_run_service.default.status[0].url}"
+  value = google_cloud_run_service.default.status[0].url
 }
