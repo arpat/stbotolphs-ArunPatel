@@ -83,7 +83,6 @@ resource "google_cloudbuild_trigger" "default" {
         "$_SERVICE_NAME",
         "--platform=managed",
         "--image=$_GCR_HOSTNAME/$PROJECT_ID/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA",
-        "--labels=managed-by=gcp-cloud-build-deploy-cloud-run,commit-sha=$COMMIT_SHA,gcb-build-id=$BUILD_ID,gcb-trigger-id=$_TRIGGER_ID,$_LABELS",
         "--region=$_DEPLOY_REGION",
         "--command=./manage.py",
         "--args=migrate",
