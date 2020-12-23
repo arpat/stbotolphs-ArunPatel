@@ -1,22 +1,14 @@
-variable "django_db_password" {
-  type = string
-}
-variable "django_aws_access_key" {
-  type = string
-}
-variable "django_aws_secret_access_key" {
-  type = string
-}
-variable "django_secret_key" {
-  type = string
+# Enable GCP APIs
+resource "google_project_service" "run" {
+  service = "run.googleapis.com"
 }
 
-// google_cloud_run_service.default:
+# google_cloud_run_service.default:
 resource "google_cloud_run_service" "default" {
   autogenerate_revision_name = true
-  location                   = "europe-west1"
-  name                       = "stbotolphs-production"
-  project                    = "stbotolphs-297814"
+  location                   = "${var.gcp_region}"
+  name                       = "stbotolphs-${var.environment_name}"
+  project                    = "${var.project_name}"
 
   template {
     spec {
