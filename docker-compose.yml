@@ -72,9 +72,12 @@ services:
   # The web application itself
   webapp:
     <<: *webapp-template
+    volumes:
+      - /home/arunsmtp/Secret/stbotolphs-cfc5ec6a6b35.json:/etc/Secret/stbotolphs-cfc5ec6a6b35.json:ro
     environment:
       - "FILER_ENABLE_LOGGING=true"
       - "FILER_DEBUG=true"
+      - "GOOGLE_APPLICATION_CREDENTIALS=/etc/Secret/stbotolphs-cfc5ec6a6b35.json"
 
   # Convenience service to make sure the latest database migrations are applied.
   webapp_migrate:

@@ -7,10 +7,18 @@ resource "google_project_service" "run" {
 resource "google_cloud_run_service" "default" {
   autogenerate_revision_name = true
   location                   = "${var.gcp_region}"
-  name                       = "stbotolphs-${var.environment_name}"
+  name                       = "${var.project_name}-${var.environment_name}"
   project                    = "${var.project_name}"
 
   template {
+    metadata {
+      annotations = {
+        "autoscaling.knative.dev/maxScale"      = "1"
+        "run.googleapis.com/cloudsql-instances" = "${var.django_db_host}"
+        "run.googleapis.com/client-name"        = "terraform"
+      }
+    }
+
     spec {
       container_concurrency = 80
       service_account_name  = "owner-project@stbotolphs-297814.iam.gserviceaccount.com"
@@ -27,7 +35,7 @@ resource "google_cloud_run_service" "default" {
         }
         env {
           name  = "DJANGO_DB_HOST"
-          value = "/cloudsql/stbotolphs-297814:europe-west1:stbotolphs-production"
+          value = "/cloudsql/${var.django_db_host}"
         }
         env {
           name  = "DJANGO_DB_USER"

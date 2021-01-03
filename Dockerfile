@@ -40,14 +40,14 @@ RUN adduser -S webapp
 # should not need to write to the local filesystem.
 RUN chown -R webapp /usr/src/app && chmod -R oug-w /usr/src/app
 
-# TODO chowm migrations directory
+# TODO chown migrations directory required by makemigrations
 RUN chown webapp /usr/local/lib/python3.7/site-packages/djangocms_forms/migrations
 
 # Run everything as the unprivileged user
-USER webapp
+# USER webapp  ## TODO - revert after debugging
 
 # Use gunicorn as a web-server after running migration command
-CMD gunicorn \
+CMD su -s /bin/sh -c "gunicorn \
 	--name botolphs \
 	--bind :$PORT \
 	--workers 3 \
@@ -55,4 +55,4 @@ CMD gunicorn \
 	--log-file=- \
 	--access-logfile=- \
 	--capture-output \
-	botolphs.wsgi
+	botolphs.wsgi" webapp

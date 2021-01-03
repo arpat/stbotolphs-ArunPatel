@@ -29,7 +29,6 @@ variable "gcp_region" {
 variable "django_db_password" {
   type = string
   # pass as TF_VAR
-  default = ""
 }
 
 variable "django_aws_access_key" {
@@ -48,12 +47,12 @@ variable "django_secret_key" {
 }
 
 
-# module "database" {
-#   source           = "../modules/cloud-sql"
-#   environment_name = var.environment_name
-#   project_name     = var.project_name
-#   gcp_region       = var.gcp_region
-# }
+module "database" {
+  source           = "../modules/cloud-sql"
+  environment_name = var.environment_name
+  project_name     = var.project_name
+  gcp_region       = var.gcp_region
+}
 
 
 module "cloudrun" {
@@ -61,7 +60,20 @@ module "cloudrun" {
   environment_name             = var.environment_name
   project_name                 = var.project_name
   gcp_region                   = var.gcp_region
+  django_db_host               = module.database.cloud_sql_connection_name
   django_db_password           = var.django_db_password
+  django_aws_access_key        = var.django_aws_access_key
+  django_aws_secret_access_key = var.django_aws_secret_access_key # pass as TF_VAR
+  django_secret_key            = var.django_secret_key
+}
+
+
+module "cloudbuild" {
+  source                       = "../modules/cloud-build"
+  environment_name             = var.environment_name
+  project_name                 = var.project_name
+  gcp_region                   = var.gcp_region
+  django_db_password           = var.django_db_password # pass as TF_VAR
   django_aws_access_key        = var.django_aws_access_key
   django_aws_secret_access_key = var.django_aws_secret_access_key # pass as TF_VAR
   django_secret_key            = var.django_secret_key
