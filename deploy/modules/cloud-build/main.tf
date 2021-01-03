@@ -77,8 +77,9 @@ resource "google_cloudbuild_trigger" "default" {
     step {
       args = [
         "-c",
-        "gcloud run services update $_SERVICE_NAME --platform=managed --image=$_GCR_HOSTNAME/$PROJECT_ID/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA --region=$_DEPLOY_REGION --command=./manage.py --args=makemigrations --max-instances=1 --timeout=300 || true",
+        "gcloud run services update $_SERVICE_NAME --platform=managed --image=$_GCR_HOSTNAME/$PROJECT_ID/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA --region=$_DEPLOY_REGION --command=bash --args= --max-instances=1 --timeout=300 || true",
         "gcloud run services update $_SERVICE_NAME --platform=managed --image=$_GCR_HOSTNAME/$PROJECT_ID/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA --region=$_DEPLOY_REGION --command=./manage.py --args=migrate --max-instances=1 --timeout=300 || true",
+        "true",
       ]
       entrypoint = "bash"
       env        = []
@@ -175,7 +176,7 @@ resource "google_cloudbuild_trigger" "default" {
   timeouts {}
 
   trigger_template {
-    branch_name  = "^deploy/initial$"
+    branch_name  = "^deploy/post-submission$"
     invert_regex = false
     project_id   = "${var.project_name}"
     repo_name    = "github_arpat_stbotolphs-arunpatel"
