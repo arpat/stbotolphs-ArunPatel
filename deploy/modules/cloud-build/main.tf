@@ -76,7 +76,7 @@ resource "google_cloudbuild_trigger" "default" {
     # get passed to migrate, as they are seperate cloud run instances.
     step {
       args = [
-        "-c",
+        "-xc",
         "gcloud run services update $_SERVICE_NAME --platform=managed --image=$_GCR_HOSTNAME/$PROJECT_ID/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA --region=$_DEPLOY_REGION --command=sh --args=-c,./migrate.sh --max-instances=1 --timeout=300 || true",
         "true",
       ]
@@ -151,6 +151,21 @@ resource "google_cloudbuild_trigger" "default" {
     #   secret_env = []
     #   wait_for   = []
     # }
+
+    ############################################################################
+    step {
+      args = [
+        "-xc",
+        "gcloud run services update $_SERVICE_NAME --platform=managed --image=$_GCR_HOSTNAME/$PROJECT_ID/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA --region=$_DEPLOY_REGION --max-instances=1 --timeout=300",
+      ]
+      entrypoint = "bash"
+      env        = []
+      id         = "PreDeploy"
+      name       = "gcr.io/google.com/cloudsdktool/cloud-sdk"
+      secret_env = []
+      wait_for   = []
+    }
+    ############################################################################
 
     step {
       args = [
