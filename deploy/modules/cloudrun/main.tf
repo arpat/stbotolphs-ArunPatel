@@ -87,7 +87,7 @@ resource "google_cloud_run_service" "default" {
         }
 
         ports {
-          container_port = 8000
+          container_port = 8080
         }
 
         resources {
