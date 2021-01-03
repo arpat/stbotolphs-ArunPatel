@@ -79,11 +79,17 @@ services:
       - "FILER_DEBUG=true"
       - "GOOGLE_APPLICATION_CREDENTIALS=/etc/Secret/stbotolphs-cfc5ec6a6b35.json"
 
+  # # Convenience service to make sure the latest database migrations are applied.
+  # webapp_migrate:
+  #   <<: *webapp-template
+  #   # HACK: we sleep to give the database time to come up
+  #   entrypoint: ['sh', '-xc', 'sleep 5 && ./manage.py makemigrations && ./manage.py migrate']
+
   # Convenience service to make sure the latest database migrations are applied.
   webapp_migrate:
     <<: *webapp-template
     # HACK: we sleep to give the database time to come up
-    entrypoint: ['sh', '-xc', 'sleep 5 && ./manage.py makemigrations && ./manage.py migrate']
+    entrypoint: ['sh', '-xc', 'sleep 5 && ./migrate.sh']
 
 volumes:
   # Persistent volumes for postgres database data

@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sh
 
 set -eu
 
@@ -8,3 +8,5 @@ set -eu
 
 ./manage.py makemigrations \
   && ./manage.py migrate
+
+echo "migrate.sh: completed."
