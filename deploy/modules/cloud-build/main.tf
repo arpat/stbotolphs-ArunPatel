@@ -80,7 +80,7 @@ resource "google_cloudbuild_trigger" "default" {
         "gcloud run services update $_SERVICE_NAME --platform=managed --image=$_GCR_HOSTNAME/$PROJECT_ID/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA --region=$_DEPLOY_REGION --command=./migrate.sh --max-instances=1 --timeout=300 || true",
         "true",
       ]
-      entrypoint = "bash"
+      entrypoint = "/bin/bash"
       env        = []
       id         = "Makemigrations"
       name       = "gcr.io/google.com/cloudsdktool/cloud-sdk"
