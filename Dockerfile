@@ -43,6 +43,7 @@ RUN chown -R webapp /usr/src/app && chmod -R oug-w /usr/src/app
 # TODO chown migrations directory required by makemigrations
 RUN chown webapp /usr/local/lib/python3.7/site-packages/djangocms_forms/migrations
 COPY ./migrate.sh ./
+COPY ./addadmin.sh ./
 
 # Run everything as the unprivileged user
 # USER webapp  ## TODO - revert after debugging
